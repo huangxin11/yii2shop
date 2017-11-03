@@ -10,6 +10,12 @@ return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
+    //设置语言
+    'language'=>'zh-CN',
+    //设置布局文件
+    //'layout'=>false,
+    //默认路由
+    'defaultRoute'=>'brand/index',
     'bootstrap' => ['log'],
     'modules' => [],
     'components' => [
@@ -17,6 +23,8 @@ return [
             'csrfParam' => '_csrf-backend',
         ],
         'user' => [
+            'class'=>'yii\web\User',
+            //指定实现认证接口的类
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
@@ -37,14 +45,15 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
+//            'suffix'=>'.html',
             'rules' => [
             ],
         ],
-        */
+
     ],
     'params' => $params,
 ];
