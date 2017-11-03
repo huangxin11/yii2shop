@@ -39,7 +39,10 @@ AppAsset::register($this);
         ['label' => 'Home', 'url' => ['/site/index']],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+        $menuItems[] = ['label' => '文章列表', 'url' => ['/article/index']];
+        $menuItems[] = ['label' => '文章分类列表', 'url' => ['/article-category/index']];
+        $menuItems[] = ['label' => '品牌列表', 'url' => ['/brand/index']];
+        $menuItems[] = ['label' => '登录', 'url' => ['/site/login']];
     } else {
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')
