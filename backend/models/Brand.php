@@ -12,12 +12,13 @@ class Brand extends ActiveRecord{
             'intro'=>'简介',
             'sort'=>'排序',
             'start'=>'状态',
+            'logo'=>'图片',
         ];
     }
     public function rules()
     {
         return [
-            [['name','intro','sort','start'],'required'],
+            [['name','intro','sort','start','logo'],'required'],
             //上传文件规则验证
             ['imgFile','file','extensions'=>['jpg','gif','png']],
             //验证码

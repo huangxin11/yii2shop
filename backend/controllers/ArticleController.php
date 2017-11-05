@@ -33,12 +33,14 @@ class ArticleController extends Controller{
         $model->load($request->post());
         $model1->load($request->post());
 //        var_dump($model);die;
-        if ($model->validate()){
+        if ($model->validate() && $model1->validate()){
             $model->create_time = time();
             $model->save(0);
-            $id = \Yii::$app->db->getLastInsertID();
-                $model1->article_id = $id;
+//            $id = \Yii::$app->db->getLastInsertID();
+                $model1->article_id = $model->id;
                 $model1->save();
+            \Yii::$app->session->setFlash('success','添加成功!');
+            return $this->redirect(['index']);
         }else{
             var_dump($model->getErrors());
         }
@@ -58,9 +60,11 @@ class ArticleController extends Controller{
         if ($request->isPost){
             $model->load($request->post());
             $model1->load($request->post());
-            if ($model->validate()){
+            if ($model->validate() && $model1->validate()){
                 $model->save(0);
                 $model1->save();
+                \Yii::$app->session->setFlash('success','修改成功!');
+                return $this->redirect(['index']);
             }else{
                 var_dump($model->getErrors());
             }
@@ -82,7 +86,6 @@ class ArticleController extends Controller{
     }
     /**
      * 展示文章内容
-     *
      */
     public function actionView(){
         $id=$_GET['id'];

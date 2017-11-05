@@ -39,9 +39,22 @@ AppAsset::register($this);
         ['label' => 'Home', 'url' => ['/site/index']],
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => '文章列表', 'url' => ['/article/index']];
-        $menuItems[] = ['label' => '文章分类列表', 'url' => ['/article-category/index']];
-        $menuItems[] = ['label' => '品牌列表', 'url' => ['/brand/index']];
+        $menuItems[] = ['label' => '文章管理', 'url' => ['/article/index'],'items'=>[
+            ['label'=>'文章列表','url' => ['/article/index']],
+                ['label'=>'添加文章','url' => ['/article/add']],
+        ]];
+        $menuItems[] = ['label' => '文章分类管理','items'=>[
+            ['label'=>'文章分类列表', 'url' => ['/article-category/index']],
+            ['label'=>'添加文章分类', 'url' => ['/article-category/add']],
+        ]];
+        $menuItems[] = ['label' => '品牌管理','items'=>[
+            ['label'=>'品牌列表', 'url' => ['/brand/index']],
+            ['label'=>'添加品牌', 'url' => ['/brand/add'],],
+        ]];
+        $menuItems[] = ['label' => '商品分类管理','items'=>[
+            ['label'=>'商品分类列表', 'url' => ['/goods-category/index']],
+            ['label'=>'添加商品分类', 'url' => ['/goods-category/add']],
+        ]];
         $menuItems[] = ['label' => '登录', 'url' => ['/site/login']];
     } else {
         $menuItems[] = '<li>'
