@@ -14,13 +14,13 @@
         <td><?=$category->intro?></td>
         <td><?=$category->parent_id?></td>
         <td>
-            <a href="<?=\yii\helpers\Url::to(['update','id'=>$category->id])?>" class="btn btn-link">修改</a>
+            <a href="<?=\yii\helpers\Url::to(['update-category','id'=>$category->id])?>" class="btn btn-link">修改</a>
             <a href="javasrcipt:;" class="btn btn-link del">删除</a>
         </td>
     </tr>
     <?php endforeach;?>
     <tr>
-        <td colspan="5"><a href="<?=\yii\helpers\Url::to(['add'])?>" class="btn btn-link">添加</a></td>
+        <td colspan="5"><a href="<?=\yii\helpers\Url::to(['add-category'])?>" class="btn btn-link">添加</a></td>
     </tr>
 </table>
 
@@ -30,7 +30,7 @@
             var id = $(this).closest("tr").find("td:first").text();
             var that = this;
             if (confirm('是否删除')){
-                $.post('delete',{id:id},function (data) {
+                $.post('delete-category',{id:id},function (data) {
                     if(data == 'success'){
                         $(that).closest("tr").remove();
                         $("#myspan").html('删除成功！');

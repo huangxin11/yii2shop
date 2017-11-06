@@ -51,9 +51,11 @@ AppAsset::register($this);
             ['label'=>'品牌列表', 'url' => ['/brand/index']],
             ['label'=>'添加品牌', 'url' => ['/brand/add'],],
         ]];
-        $menuItems[] = ['label' => '商品分类管理','items'=>[
-            ['label'=>'商品分类列表', 'url' => ['/goods-category/index']],
-            ['label'=>'添加商品分类', 'url' => ['/goods-category/add']],
+        $menuItems[] = ['label' => '商品管理','items'=>[
+            ['label'=>'商品分类列表', 'url' => ['/goods/index-category']],
+            ['label'=>'添加商品分类', 'url' => ['/goods/add-category']],
+            ['label'=>'添加商品', 'url' => ['/goods/add-goods']],
+            ['label'=>'商品列表', 'url' => ['/goods/index-goods']],
         ]];
         $menuItems[] = ['label' => '登录', 'url' => ['/site/login']];
     } else {
