@@ -1,7 +1,6 @@
 <?php
 $form = \yii\bootstrap\ActiveForm::begin();
 echo $form->field($model,'name')->textInput();
-echo $form->field($model,'sn')->textInput();
 echo $form->field($model,'logo')->hiddenInput();
 //echo $form->field($model,'imgFile')->fileInput();
 //注册css文件和js文件

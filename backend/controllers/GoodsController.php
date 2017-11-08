@@ -15,188 +15,190 @@ use yii\web\Controller;
 use yii\web\UploadedFile;
 
 
-class GoodsController extends Controller{
+class GoodsController extends Controller
+{
     /**
      * @return string
      * 分类展示
      */
     public $enableCsrfValidation = false;
-    public function actionIndexCategory(){
-        $categorys = GoodsCategory::find()->orderBy(['tree'=>'ASC','lft'=>'ASC'])->all();
-        return $this->render('index',['categorys'=>$categorys]);
+
+    public function actionIndexCategory()
+    {
+        $categorys = GoodsCategory::find()->orderBy(['tree' => 'ASC', 'lft' => 'ASC'])->all();
+        return $this->render('index', ['categorys' => $categorys]);
     }
 
     //分类添加
-    public function actionAddCategory(){
+    public function actionAddCategory()
+    {
         $model = new GoodsCategory();
-        $model->parent_id =0;
+        $model->parent_id = 0;
         $request = \Yii::$app->request;
-        if ($request->isPost){
+        if ($request->isPost) {
             $model->load($request->post());
-            if ($model->validate()){
-                if ($model->parent_id == 0){
+            if ($model->validate()) {
+                if ($model->parent_id == 0) {
                     //创建根节点
                     $model->makeRoot();
                     //$model->save(); //不能使用save创建节点
-                    \Yii::$app->session->setFlash('success','添加成功');
+                    \Yii::$app->session->setFlash('success', '添加成功');
                     return $this->redirect(['index-category']);
-                }else{
-                    $parent = GoodsCategory::findOne(['id'=>$model->parent_id]);
+                } else {
+                    $parent = GoodsCategory::findOne(['id' => $model->parent_id]);
                     //添加子节点
                     /*      $russia = new Menu(['name' => 'Russia']);
                           $russia->prependTo($countries);*/
                     $model->prependTo($parent);
-                    \Yii::$app->session->setFlash('success','添加成功');
+                    \Yii::$app->session->setFlash('success', '添加成功');
                     return $this->redirect(['index-category']);
                 }
             }
         }
-        return $this->render('add-category',['model'=>$model]);
+        return $this->render('add-category', ['model' => $model]);
     }
+
     /**
      * @return string
      * 分类修改
      */
-    public function actionUpdateCategory($id){
-        $model = GoodsCategory::findOne(['id'=>$id]);
+    public function actionUpdateCategory($id)
+    {
+        $model = GoodsCategory::findOne(['id' => $id]);
         $request = \Yii::$app->request;
-        if ($request->isPost){
+        if ($request->isPost) {
             $model->load($request->post());
-            if ($model->validate()){
-                if ($model->parent_id == 0){
-                    if ($model->getOldAttribute('parent_id') == 0){
-                            $model->save();
-                    }else{
+            if ($model->validate()) {
+                if ($model->parent_id == 0) {
+                    if ($model->getOldAttribute('parent_id') == 0) {
+                        $model->save();
+                    } else {
                         //修改根节点
                         $model->makeRoot();
                     }
-                    \Yii::$app->session->setFlash('success','修改成功');
+                    \Yii::$app->session->setFlash('success', '修改成功');
                     return $this->redirect(['index-category']);
-                }else{
-                    $parent = GoodsCategory::findOne(['id'=>$model->parent_id]);
+                } else {
+                    $parent = GoodsCategory::findOne(['id' => $model->parent_id]);
                     //添加子节点
                     /*      $russia = new Menu(['name' => 'Russia']);
                           $russia->prependTo($countries);*/
                     $model->prependTo($parent);
-                    \Yii::$app->session->setFlash('success','修改成功');
+                    \Yii::$app->session->setFlash('success', '修改成功');
                     return $this->redirect(['index-category']);
                 }
 
             }
-        }else{
+        } else {
 //            var_dump($model);die;
 //            var_dump($model->parent_id);die;
-            return $this->render('add-category',['model'=>$model]);
+            return $this->render('add-category', ['model' => $model]);
         }
     }
+
     /**
      * @return string
      * 分类删除
      */
-    public function actionDeleteCategory(){
-        $id=$_POST['id'];
-        $category = GoodsCategory::findOne(['id'=>$id]);
-        if ($category->isLeaf()){
-            if ($category->parent_id != 0){
+    public function actionDeleteCategory()
+    {
+        $id = $_POST['id'];
+        $category = GoodsCategory::findOne(['id' => $id]);
+        if ($category->isLeaf()) {
+            if ($category->parent_id != 0) {
                 $category->delete();
                 echo 'success';
-            }else{
+            } else {
                 $category->deleteWithChildren();
                 echo 'success';
             }
-        }else{
+        } else {
             echo 'false';
         }
-  /*      $chiden = GoodsCategory::find()->where(['parent_id'=>$id])->all();
-        if ($chiden){
+        /*      $chiden = GoodsCategory::find()->where(['parent_id'=>$id])->all();
+              if ($chiden){
 
-        }else{
+              }else{
 
-        }*/
+              }*/
     }
+
     /**
      * 商品的显示
      */
-    public function actionIndexGoods(){
+    public function actionIndexGoods()
+    {
         $quest = Goods::find();
         $pager = new Pagination();
-        $pager->totalCount = $quest->where(['status'=>1])->count();
+        $pager->totalCount = $quest->where(['status' => 1])->count();
         $pager->pageSize = 3;
-        if (!empty($_GET)){
-            if (isset($_GET['name'])){
+        if (!empty($_GET)) {
+            if (isset($_GET['name'])) {
                 $keyword = $_GET;
-                $name = $keyword['name']?$keyword['name']:'';
-                $sn = $keyword['sn']?$keyword['sn']:'';
-                $minprice = $keyword['minprice']?$keyword['minprice']:0;
-                $maxprice = $keyword['maxprice']?$keyword['maxprice']:PHP_INT_MAX;
-                $goods = $quest->where(['status'=>1])->andWhere(['like','name',$name])->andWhere(['like','sn',$sn])->andWhere(['between','shop_price',$minprice,$maxprice])->limit($pager->pageSize)->offset($pager->offset)->all();
-            }else{
-                $goods = $quest->where(['status'=>1])->limit($pager->pageSize)->offset($pager->offset)->all();
+                $name = $keyword['name'] ? $keyword['name'] : '';
+                $sn = $keyword['sn'] ? $keyword['sn'] : '';
+                $minprice = $keyword['minprice'] ? $keyword['minprice'] : 0;
+                $maxprice = $keyword['maxprice'] ? $keyword['maxprice'] : PHP_INT_MAX;
+                $goods = $quest->where(['status' => 1])->andWhere(['like', 'name', $name])->andWhere(['like', 'sn', $sn])->andWhere(['between', 'shop_price', $minprice, $maxprice])->limit($pager->pageSize)->offset($pager->offset)->all();
+            } else {
+                $goods = $quest->where(['status' => 1])->limit($pager->pageSize)->offset($pager->offset)->all();
             }
-        }else{
-            $goods = $quest->where(['status'=>1])->limit($pager->pageSize)->offset($pager->offset)->all();
+        } else {
+            $goods = $quest->where(['status' => 1])->limit($pager->pageSize)->offset($pager->offset)->all();
         }
 
 
-
-
-   return $this->render('index-goods',['goods'=>$goods,'pager'=>$pager]);
+        return $this->render('index-goods', ['goods' => $goods, 'pager' => $pager]);
     }
+
     /**
      * @return string
      * 商品的添加
      */
-    public function actionAddGoods(){
+    public function actionAddGoods()
+    {
         $model = new Goods();
         $model1 = new GoodsIntro();
-        $model2 = GoodsDayCount::findOne(['day'=>date('Y-m-d',time())]);
+        $model2 = GoodsDayCount::findOne(['day' => date('Y-m-d', time())]);
         $request = \Yii::$app->request;
-     if ($request->isPost) {
-//            var_dump($request->post());die;
-         $model->load($request->post());
-         $model1->load($request->post());
-         if ($model->validate() && $model1->validate()){
-             $model->create_time = time();
-             $model->save(0);
-             $model1->goods_id = $model->id;
-             $model1->save(0);
-             if (empty($model2)){
-/*                 $day = $model2->day;
-                 $model2->count = GoodsDayCount::findOne(['day'=>$day]);*/
-                    $goods = new GoodsDayCount();
-                 $goods->day = date('Y-m-d',time());
-                 $goods->count = 1;
-                 $goods->save();
-             }else{
-/*                 $day = $model2->day;
-                 $model2->day = $day;*/
-                 $model2->count +=1;
-                 $model2->save(0);
-                 \Yii::$app->session->setFlash('success','添加成功');
-                 return $this->redirect(['index-goods']);
-             }
-         }else{
-             var_dump($model->getErrors());
-             var_dump($model1->getErrors());
-             var_dump($model2->getErrors());die;
-         }
-        }
-        $session = \Yii::$app->session;
-            if (empty($session['sn'])){
-                echo 1;die;
-                $session['sn'] = date('Ymd',time())*100000+1;
-                $sn = $session['sn'];
-            }else{
-                $session['sn'] += 1;
-                $sn = $session['sn'];
-            }
+        if ($request->isPost) {
+            $model->load($request->post());
+            $model1->load($request->post());
+            $sn = date('Ymd', time()) * 100000 + $model2->count+1;
             $model->sn = $sn;
+            if ($model->validate() && $model1->validate()) {
+                $model->create_time = time();
+                $model->save(0);
+                $model1->goods_id = $model->id;
+                $model1->save(0);
+                if (empty($model2)) {
+                    $goods = new GoodsDayCount();
+                    $goods->day = date('Y-m-d', time());
+                    $goods->count = 1;
+                    $goods->save();
+                } else {
+                    $model2->count += 1;
+                    $model2->save(0);
+                }
+                \Yii::$app->session->setFlash('success', '添加成功');
+                return $this->redirect(['index-goods']);
+            }else{
+                var_dump($model->getErrors());
+                var_dump($model1->getErrors());
+                var_dump($model2->getErrors());
+            }
+        }else{
+            $brands = Brand::find()->where(['start' => 1])->all();
+            $model->goods_category_id = 0;
+            $brands = ArrayHelper::map($brands, 'id', 'name');
+            return $this->render('add-goods', ['model' => $model, 'brands' => $brands, 'model1' => $model1]);
+        }
 
-        $brands = Brand::find()->where(['start'=>1])->all();
-        $model->goods_category_id=0;
-        $brands = ArrayHelper::map($brands,'id','name');
-        return $this->render('add-goods',['model'=>$model,'brands'=>$brands,'model1'=>$model1]);
+
+
     }
+
+
     /**
      * @return string
      * 修改
@@ -240,19 +242,29 @@ class GoodsController extends Controller{
      * @return string
      * 相册
      */
-    public function actionAddLogo($id){
+    public function actionIndexLogo(){
+        $id = $_GET['id'];
         $model = new GoodsGallery();
-        $request = \Yii::$app->request;
-        if ($request->isPost){
-            $model->load($request->post());
-            if ($model->validate()){
-                $model->save();
-                \Yii::$app->session->setFlash('success','添加成功');
-                return $this->redirect('add-logo?id='.$id);
-            }
-        }
         $goodslogo = GoodsGallery::find()->where(['goods_id'=>$id])->all();
         return $this->render('add-logo',['model'=>$model,'id'=>$id,'goodslogo'=>$goodslogo]);
+    }
+    /**
+     * ajax添加图片
+     */
+    public function actionAddLogo(){
+        $request = \Yii::$app->request;
+        $model = new GoodsGallery();
+        if ($request->isPost){
+           $logo = $request->post();
+           $model->goods_id = $logo['goods_id'];
+           $model->path = $logo['path'];
+           if ($model->validate()){
+               if ($model->save()){
+                   echo $model->id;
+               }
+           }
+        }
+
     }
     /**
      * @return string

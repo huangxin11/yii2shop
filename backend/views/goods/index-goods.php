@@ -27,7 +27,7 @@
         <td>
             <a href="javascript:;" class="btn btn-info del">删除</a>
             <a href="<?=\yii\helpers\Url::to(['update-goods','id'=>$good->id])?>" class="btn btn-default">修改</a>
-            <a href="<?=\yii\helpers\Url::to(['add-logo','id'=>$good->id])?>" class="btn btn-success">相册</a>
+            <a href="<?=\yii\helpers\Url::to(['index-logo','id'=>$good->id])?>" class="btn btn-success">相册</a>
         </td>
     </tr>
     <?php endforeach;?>

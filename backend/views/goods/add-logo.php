@@ -55,7 +55,7 @@ JS
 
 <?php
 echo \yii\bootstrap\Html::img($model->path?$model->path:false,['id'=>'img','height'=>50]);
-echo \yii\bootstrap\Html::submitButton('添加图片',['class'=>'btn btn-block add']);
+echo \yii\bootstrap\Html::button('添加图片',['class'=>'btn btn-block add']);
 echo $form->field($model,'path')->hiddenInput();
 echo $form->field($model,'goods_id')->hiddenInput(['value'=>$id]);
 \yii\bootstrap\ActiveForm::end();
@@ -63,6 +63,7 @@ echo $form->field($model,'goods_id')->hiddenInput(['value'=>$id]);
 <span id="myspan" style="color: red"></span>
 <table class="table">
     <tr>
+        <th hidden="hidden">ID</th>
         <th>图片</th>
         <th>操作</th>
     </tr>
@@ -76,9 +77,18 @@ echo $form->field($model,'goods_id')->hiddenInput(['value'=>$id]);
     </tr>
     <?php endforeach;?>
 </table>
+
     <script>
         <?php $this->beginBlock('myjs');?>
-
+        $(".add").click(function () {
+            var id = $("#goodsgallery-goods_id").val();
+            var path = $("#goodsgallery-path").val();
+            $.post('add-logo',{goods_id:id,path:path},function (data) {
+                    $("<tr><td hidden=hidden>"+data+"</td> <td><img src='"+path+"' alt='' width='100'></td><td> <a href='javascript:;' class='btn btn-link del'>删除</a></td></tr>").appendTo("table");
+                $("#myspan").html('添加成功！');
+            });
+            $("input[type=reset]").trigger("click");//触发reset
+        });
         $("table").on('click','.del',function () {
             var id = $(this).closest("tr").find("td:first").text();
             var that = this;
@@ -94,6 +104,7 @@ echo $form->field($model,'goods_id')->hiddenInput(['value'=>$id]);
             }
 
         });
+
         <?php $this->endBlock();?>
     </script>
 <?php $this->registerJs($this->blocks['myjs']);?>
