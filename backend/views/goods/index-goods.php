@@ -49,9 +49,6 @@
         }
 
     });
-    $("#keyword").click{
-        alert(2);
-    }
     <?php $this->endBlock();?>
 </script>
 <?php $this->registerJs($this->blocks['myjs']);?>
