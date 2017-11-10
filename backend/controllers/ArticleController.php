@@ -3,6 +3,7 @@ namespace backend\controllers;
 use backend\models\Article;
 use backend\models\ArticleCategory;
 use backend\models\ArticleDetail;
+use frontend\filters\RbacFilter;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
@@ -92,5 +93,14 @@ class ArticleController extends Controller{
         $model =ArticleDetail::findOne(['article_id'=>$id]);
         $article = Article::findOne(['id'=>$id]);
         return $this->render('view',['model'=>$model,'article'=>$article]);
+    }
+
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>\backend\filters\RbacFilter::className(),
+            ],
+        ];
     }
 }

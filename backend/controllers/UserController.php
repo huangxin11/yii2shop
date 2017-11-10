@@ -2,8 +2,11 @@
 namespace backend\controllers;
 use backend\models\EditPasswordForm;
 use backend\models\LoginForm;
+use backend\models\RoleForm;
 use backend\models\User;
+use frontend\filters\RbacFilter;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\Cookie;
 
@@ -28,19 +31,26 @@ class UserController extends Controller{
                 $model->auth_key = \Yii::$app->security->generateRandomString();
                 $model->created_at = time();
                 $model->save();
+                foreach ($model->roles as $role){
+                    $role = \Yii::$app->authManager->getRole($role);
+                    \Yii::$app->authManager->assign($role,$model->id);
+                }
                 \Yii::$app->session->setFlash('success','添加成功!');
                 return $this->redirect(['index']);
             }else{
              var_dump($model->getErrors());
             }
         }else{
-            return $this->render('add',['model'=>$model]);
+           $roles =  \Yii::$app->authManager->getRoles();
+            $roles = ArrayHelper::map($roles,'name','name');
+            return $this->render('add',['model'=>$model,'roles'=>$roles]);
         }
     }
     /**
      * 修改
      */
     public function actionUpdate($id){
+        $auth = \Yii::$app->authManager;
         $model = User::findOne(['id'=>$id]);
         $request = \Yii::$app->request;
         if ($request->isPost){
@@ -48,13 +58,22 @@ class UserController extends Controller{
             if ($model->validate()){
                 $model->updated_at = time();
                 $model->save();
-                \Yii::$app->session->setFlash('success','添加成功!');
+                $auth->revokeAll($id);
+                if ($model->roles){
+                    foreach ($model->roles as $role){
+                        $role = $auth->getRole($role);
+                        $auth->assign($role,$id);
+                    }
+                }
+                \Yii::$app->session->setFlash('success','修改成功!');
                 return $this->redirect(['index']);
             }else{
                 var_dump($model->getErrors());
             }
         }else{
-            return $this->render('add',['model'=>$model]);
+            $model->roles = ArrayHelper::map($auth->getRolesByUser($model->getId()),'name','name');
+            $roles = ArrayHelper::map($auth->getRoles(),'name','name');
+            return $this->render('add',['model'=>$model,'roles'=>$roles]);
         }
     }
     /**
@@ -136,7 +155,7 @@ class UserController extends Controller{
         }
 
     }
-    //配置
+   /* //配置
     public function behaviors()
     {
         return [
@@ -154,7 +173,7 @@ class UserController extends Controller{
                         'actions'=>['index','login'],
                         'roles'=>['?']
                     ],
-                    /*       [
+                  [
                                'allow'=>true,
                                'actions'=>['delete'],
                                'roles'=>['@'],
@@ -164,11 +183,20 @@ class UserController extends Controller{
                                        return true;
                                    }//可以访问
                                }
-                           ],*/
+                           ],
                 ]
 
             ]
 
+        ];
+    }*/
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>\backend\filters\RbacFilter::className(),
+                'except'=>['login'],
+            ],
         ];
     }
 

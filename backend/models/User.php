@@ -4,6 +4,7 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 class User extends ActiveRecord implements IdentityInterface {
+    public $roles;
     public function attributeLabels()
     {
         return [
@@ -11,6 +12,7 @@ class User extends ActiveRecord implements IdentityInterface {
             'password_hash'=>'密码',
 //            'auth_key'=>'是否允许自动登录',
             'email'=>'邮箱',
+            'roles'=>'角色',
             'status'=>'状态',
         ];
 
@@ -19,6 +21,10 @@ class User extends ActiveRecord implements IdentityInterface {
     {
         return [
             ['username','string','max'=>255],
+            ['roles','safe'],
+            ['email', 'email'],
+            ['email', 'unique'],
+            ['username', 'unique'],
             ['password_hash','string','max'=>100],
             [['username','password_hash','email','status'],'required'],
         ];

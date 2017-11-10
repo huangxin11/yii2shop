@@ -44,8 +44,6 @@ AppAsset::register($this);
         $menuItems[] = ['label' => '文章管理', 'url' => ['/article/index'],'items'=>[
             ['label'=>'文章列表','url' => ['/article/index']],
             ['label'=>'添加文章','url' => ['/article/add']],
-        ]];
-        $menuItems[] = ['label' => '文章分类管理','items'=>[
             ['label'=>'文章分类列表', 'url' => ['/article-category/index']],
             ['label'=>'添加文章分类', 'url' => ['/article-category/add']],
         ]];
@@ -62,6 +60,12 @@ AppAsset::register($this);
         $menuItems[] = ['label' => '用户管理','items'=>[
             ['label'=>'用户列表', 'url' => ['/user/index']],
             ['label'=>'添加用户', 'url' => ['/user/add']],
+        ]];
+        $menuItems[] = ['label' => 'RBAC','items'=>[
+            ['label'=>'权限列表', 'url' => ['/auth/index-permission']],
+            ['label'=>'添加权限', 'url' => ['/auth/add-permission']],
+            ['label'=>'角色列表', 'url' => ['/auth/index-role']],
+            ['label'=>'添加角色', 'url' => ['/auth/add-role']],
         ]];
         $menuItems[] = ['label' => '修改密码', 'url' => ['/user/edit']];
         $menuItems[] = '<li>'

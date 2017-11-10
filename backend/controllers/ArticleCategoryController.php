@@ -1,6 +1,7 @@
 <?php
 namespace backend\controllers;
 use backend\models\ArticleCategory;
+use frontend\filters\RbacFilter;
 use yii\data\Pagination;
 use yii\web\Controller;
 use yii\web\UploadedFile;
@@ -73,6 +74,15 @@ class ArticleCategoryController extends Controller{
         }else{
             var_dump($category->getErrors());
         }
+    }
+
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>\backend\filters\RbacFilter::className(),
+            ],
+        ];
     }
 
 

@@ -8,6 +8,7 @@ use backend\models\GoodsDayCount;
 use backend\models\GoodsGallery;
 use backend\models\GoodsIntro;
 use backend\models\KeyForm;
+use frontend\filters\RbacFilter;
 use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
@@ -317,6 +318,13 @@ class GoodsController extends Controller
         ];
     }
 
-
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>\backend\filters\RbacFilter::className(),
+            ],
+        ];
+    }
 
 }

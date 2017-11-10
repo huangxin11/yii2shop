@@ -1,6 +1,7 @@
 <?php
 namespace backend\controllers;
 use backend\models\Brand;
+use frontend\filters\RbacFilter;
 use yii\data\Pagination;
 use yii\helpers\Json;
 use yii\web\Controller;
@@ -174,5 +175,14 @@ class BrandController extends Controller{
                 var_dump($ret);
             }
 
+    }
+
+    public function behaviors()
+    {
+        return [
+            'rbac'=>[
+                'class'=>\backend\filters\RbacFilter::className(),
+            ],
+        ];
     }
 }

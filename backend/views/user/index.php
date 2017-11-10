@@ -3,7 +3,6 @@
     <tr>
         <th>ID</th>
         <th>用户名</th>
-        <th>是否允许自动登录</th>
         <th>状态</th>
         <th>邮箱</th>
         <th>最后登录时间</th>
@@ -13,10 +12,10 @@
     <tr>
         <td><?=$user->id?></td>
         <td><?=$user->username?></td>
-        <td><?=$user->auth_key==0?'不允许':'允许' ?></td>
         <td><?=$user->status==0?'禁用':'启用' ?></td>
-        <td><?=date('Y-m-d H:i:s',$user->last_login_time) ?></td>
         <td><?=$user->email?></td>
+        <td><?=date('Y-m-d H:i:s',$user->last_login_time)?></td>
+
         <td>
             <a href="<?=\yii\helpers\Url::to(['update','id'=>$user->id])?>">修改</a>
             <a href="javascript:;" class="btn btn-link del">删除</a>
@@ -24,7 +23,7 @@
     </tr>
     <?php endforeach;?>
     <tr>
-        <td colspan="6">
+        <td colspan="7">
             <a href="<?=\yii\helpers\Url::to(['add'])?>">添加</a>
         </td>
     </tr>
