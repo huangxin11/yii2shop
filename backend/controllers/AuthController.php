@@ -6,6 +6,7 @@ use yii\helpers\ArrayHelper;
 use yii\rbac\Permission;
 use yii\rbac\Role;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 
 class AuthController extends Controller{
     /**
@@ -20,25 +21,18 @@ class AuthController extends Controller{
      * 添加权限
      */
     public function actionAddPermission(){
-        $auth = \Yii::$app->authManager;
             $model = new PermissionForm();
+            $model->scenario = PermissionForm::SCENARIO_Add;
         $request = \Yii::$app->request;
         if ($request->isPost){
             $model->load($request->post());
-                if ($model->validate()){
-                    if ($auth->getPermission($model->name)){
-                        \Yii::$app->session->setFlash('success','添加失败，该权限已存在');
-                        return $this->redirect(['add-permission']);
-                    }
-                    $permission = $auth->createPermission($model->name);
-                    $permission->description = $model->description;
-                    $auth->add($permission);
+                if ($model->validate() && $model->add()){
                     \Yii::$app->session->setFlash('success','添加成功');
                     return $this->redirect(['index-permission']);
                 }
-        }else{
-            return $this->render('addpermission',['model'=>$model]);
         }
+            return $this->render('addpermission',['model'=>$model]);
+
     }
     /**
      * 修改权限
@@ -47,14 +41,17 @@ class AuthController extends Controller{
             $name = $_GET['name'];
             $auth = \Yii::$app->authManager;
             $form = new PermissionForm();
+        $form->scenario = PermissionForm::SCENARIO_EDIT;
         $permission = $auth->getPermission($name);
+        $name = $permission->name;
+        $form->oldName = $name;
+        if ($permission == null){
+            throw new NotFoundHttpException('权限不存在');
+        }
             $request = \Yii::$app->request;
             if ($request->isPost){
                 $form->load($request->post());
-                if ($form->validate()){
-                    $newpermission = $auth->createPermission($form->name);
-                    $newpermission->description = $form->description;
-                    $auth->update($permission->name,$newpermission);
+                if ($form->validate() && $form->update($name)){
                     \Yii::$app->session->setFlash('success','修改成功！');
                     return $this->redirect(['index-permission']);
                 }

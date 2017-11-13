@@ -2,6 +2,7 @@
 namespace backend\controllers;
 use backend\models\EditPasswordForm;
 use backend\models\LoginForm;
+use backend\models\Menu;
 use backend\models\RoleForm;
 use backend\models\User;
 use frontend\filters\RbacFilter;
@@ -93,7 +94,9 @@ class UserController extends Controller{
         $model = new LoginForm();
         $request = \Yii::$app->request;
 /*        $cookie1 = \Yii::$app->request->cookies;*/
+
             if ($request->isPost){
+//                var_dump($model->Remember_Password);die;
                 $model->load($request->post());
                 if ($model->validate()){
                     if ($model->login()){

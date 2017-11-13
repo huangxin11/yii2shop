@@ -39,9 +39,11 @@ AppAsset::register($this);
         ['label' => 'Home', 'url' => ['/site/index']],
     ];
     if (Yii::$app->user->isGuest) {
+        $menuItems = [];
         $menuItems[] = ['label' => '登录', 'url' => ['/user/login']];
     } else {
-        $menuItems[] = ['label' => '文章管理', 'url' => ['/article/index'],'items'=>[
+        $menuItems = Yii::$app->user->identity->menus;
+      /*  $menuItems[] = ['label' => '文章管理', 'url' => ['/article/index'],'items'=>[
             ['label'=>'文章列表','url' => ['/article/index']],
             ['label'=>'添加文章','url' => ['/article/add']],
             ['label'=>'文章分类列表', 'url' => ['/article-category/index']],
@@ -67,7 +69,7 @@ AppAsset::register($this);
             ['label'=>'角色列表', 'url' => ['/auth/index-role']],
             ['label'=>'添加角色', 'url' => ['/auth/add-role']],
         ]];
-        $menuItems[] = ['label' => '修改密码', 'url' => ['/user/edit']];
+       $menuItems[] = ['label' => '修改密码', 'url' => ['/user/edit']]; */
         $menuItems[] = '<li>'
             . Html::beginForm(['/user/logout'], 'post')
             . Html::submitButton(

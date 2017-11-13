@@ -29,6 +29,30 @@ class User extends ActiveRecord implements IdentityInterface {
             [['username','password_hash','email','status'],'required'],
         ];
     }
+    //获取用户对应的菜单
+    public function getMenus(){
+        $menuItems = [];
+        //获取所有一级菜单
+        $menus = Menu::find()->where(['menu_id'=>0])->orderBy(['sort'=>'ASC'])->all();
+
+
+        foreach ($menus as $menu){
+            $items = [];
+            foreach ($menu->children as $child){
+                if (\Yii::$app->user->can($child->url)){
+                    $items[] = ['label' => $child->name,'url' => [$child->url]];
+                }
+
+            }
+            $menuItem = ['label'=>$menu->name,'items'=>$items];
+            if ($items){
+                $menuItems[] = $menuItem;
+            }
+//            var_dump($menuItems);die;
+
+        }
+        return $menuItems;
+    }
 
     /**
      * Finds an identity by the given ID.
