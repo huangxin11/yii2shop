@@ -24,7 +24,7 @@
         </div>
         <div class="topnav_right fr">
             <ul>
-                <li>您好，欢迎来到京西！[<a href="login.html">登录</a>] [<a href="register.html">免费注册</a>] </li>
+                <li>您好，欢迎来到京西！[<a href="<?=\yii\helpers\Url::to(['member/login'])?>"">登录</a>] [<a href="register.html">免费注册</a>] </li>
                 <li class="line">|</li>
                 <li>我的订单</li>
                 <li class="line">|</li>
@@ -87,7 +87,7 @@
                     </li>
                     <li class="checkcode">
                         <label for="">验证码：</label>
-                        <input type="text"  name="checkcode" />
+                        <input type="text"  name="checkcode"  />
                         <img id="img_captcha" alt="" />
                         <span>看不清？<a href="javascript:;" id="change_captcha">换一张</a></span>
                     </li>
@@ -149,10 +149,10 @@
             rules: {
                 username: {
                     required: true,
-                   remote: {
-                       url:"<?=\yii\helpers\Url::to(['member/check-name'])?>",
-                   },
-           },
+                    remote: {
+                        url:"<?=\yii\helpers\Url::to(['member/check-name'])?>",
+                    },
+                },
                 email: {
                     required: true,
                     email: true
@@ -173,18 +173,18 @@
                     maxlength:20
                 },
                 checkcode:{
-                    check_captcha:true
+                    check_captcha:true,
                 },
                 captcha: {
-                        remote: {
-                            url: "<?=\yii\helpers\Url::to('check-sms')?>",     //后台处理程序
-                                type: "post",               //数据发送方式
-                                dataType: "json",           //接受数据格式
-                                data: {                     //要传递的数据
-                                  phone: $("#tel").val(),
-                                  sms: $("#captcha").val()
-                            }
+                    remote: {
+                        url: "<?=\yii\helpers\Url::to('check-sms')?>",     //后台处理程序
+                        type: "post",               //数据发送方式
+                        dataType: "json",           //接受数据格式
+                        data: {                     //要传递的数据
+                            phone: $("#tel").val(),
+                            sms: $("#captcha").val()
                         }
+                    }
                 }
             },
             messages: {

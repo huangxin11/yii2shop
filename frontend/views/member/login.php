@@ -25,7 +25,7 @@
         </div>
         <div class="topnav_right fr">
             <ul>
-                <li>您好，欢迎来到京西！[<a href="login.html">登录</a>] [<a href="register.html">免费注册</a>] </li>
+                <li>您好，欢迎来到京西！[<a href="<?=\yii\helpers\Url::to(['index/index'])?>">不登陆去首页</a>] [<a href="<?=\yii\helpers\Url::to(['member/regist'])?>">免费注册</a>] </li>
                 <li class="line">|</li>
                 <li>我的订单</li>
                 <li class="line">|</li>
@@ -68,7 +68,7 @@
                     </li>
                     <li class="checkcode">
                         <label for="">验证码：</label>
-                        <input type="text"  name="checkcode" />
+                        <input type="text"  name="checkcode"/>
                         <img id="img_captcha" alt="" />
                         <span>看不清？<a href="javascript:;" id="change_captcha">换一张</a></span>
                     </li>
@@ -147,7 +147,7 @@
                     required: true,
                 },
                 checkcode:{
-                    check_captcha:true
+                    check_captcha:true,
                 }
 
 

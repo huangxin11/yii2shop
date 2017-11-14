@@ -10,7 +10,7 @@ class MemberController extends Controller{
     public $enableCsrfValidation = false;
 
     public function actionIndex(){
-        return $this->render('index');
+        return $this->redirect(['index/index']);
     }
 
     /**
@@ -45,10 +45,6 @@ class MemberController extends Controller{
      * 登录
      */
     public function actionLogin(){
-        $redis = new \Redis();
-        $redis->connect('127.0.0.1');
-        $code = $redis->get('captcha_'.'18782451002');
-        var_dump($code);die;
         $request = \Yii::$app->request;
         $model = new \frontend\models\LoginForm();
         if ($request->isPost){
@@ -57,7 +53,7 @@ class MemberController extends Controller{
             if ($model->validate()){
             if ($model->login()){
                 \Yii::$app->session->setFlash('success','登录失败！用户名密码错误');
-                return $this->redirect(['member/index']);
+                return $this->redirect(['index/index']);
             }else{
                 \Yii::$app->session->setFlash('success','登录失败！用户名密码错误');
                 return $this->redirect(['member/login']);
@@ -146,27 +142,27 @@ class MemberController extends Controller{
      * 配置
      */
 //配置
- public function behaviors()
- {
-     return [
-         'acf'=>[ //简单存取过滤器 简单的权限控制
-             'class'=>AccessControl::className(),
-             'only'=>['delete','add','update','index','edit'],
-             'rules'=>[
-                 [ //允许登录用户访问  ?未登录  @已登录
-                     'allow'=>true,//允许
-                     'actions'=>['add','update','index','edit'], //操作
-                     'roles'=>['@'], //角色
-                 ],
-                 [//允许未登录用户访问
-                     'allow'=>true,
-                     'actions'=>['login'],
-                     'roles'=>['?']
-                 ],
-             ]
-
-         ]
-
-     ];
- }
+// public function behaviors()
+// {
+//     return [
+//         'acf'=>[ //简单存取过滤器 简单的权限控制
+//             'class'=>AccessControl::className(),
+//             'only'=>['delete','add','update','index','edit'],
+//             'rules'=>[
+//                 [ //允许登录用户访问  ?未登录  @已登录
+//                     'allow'=>true,//允许
+//                     'actions'=>['add','update','index','edit'], //操作
+//                     'roles'=>['@'], //角色
+//                 ],
+//                 [//允许未登录用户访问
+//                     'allow'=>true,
+//                     'actions'=>['login','index'],
+//                     'roles'=>['?']
+//                 ],
+//             ]
+//
+//         ]
+//
+//     ];
+// }
 }

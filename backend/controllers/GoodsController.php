@@ -161,6 +161,11 @@ class GoodsController extends Controller
         $model = new Goods();
         $model1 = new GoodsIntro();
         $model2 = GoodsDayCount::findOne(['day' => date('Y-m-d', time())]);
+        if (empty($model2)){
+            $goods = new GoodsDayCount();
+            $goods->day = date('Y-m-d', time());
+            $goods->save();
+        }
         $request = \Yii::$app->request;
         if ($request->isPost) {
             $model->load($request->post());
@@ -172,15 +177,10 @@ class GoodsController extends Controller
                 $model->save(0);
                 $model1->goods_id = $model->id;
                 $model1->save(0);
-                if (empty($model2)) {
-                    $goods = new GoodsDayCount();
-                    $goods->day = date('Y-m-d', time());
-                    $goods->count = 1;
-                    $goods->save();
-                } else {
+
                     $model2->count += 1;
                     $model2->save(0);
-                }
+
                 \Yii::$app->session->setFlash('success', '添加成功');
                 return $this->redirect(['index-goods']);
             }else{
