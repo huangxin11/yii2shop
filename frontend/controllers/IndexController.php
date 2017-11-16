@@ -96,9 +96,10 @@ class IndexController extends Controller{
         $intro = GoodsIntro::findOne(['goods_id'=>$goods_id]);
         $gallerys = GoodsGallery::find()->where(['goods_id'=>$goods_id])->all();
         $good = Goods::findOne(['id'=>$goods_id]);
-//        var_dump($good);die;
+        $content = GoodsIntro::findOne(['goods_id'=>$goods_id]);
+//        var_dump($content->content);die;
 //        var_dump($gallerys);die;
-        return $this->render('intro',['intro'=>$intro,'gallerys'=>$gallerys,'good'=>$good]);
+        return $this->render('intro',['intro'=>$intro,'gallerys'=>$gallerys,'good'=>$good,'content'=>$content]);
     }
 //    public function actionDe(){
 //        $redis = new \Redis();

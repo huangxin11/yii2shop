@@ -578,14 +578,9 @@
                     <div class="smallpic_wrap">
                         <ul>
                             <li class="cur">
-                                <a class="zoomThumbActive" href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: 'images/preview_m1.jpg',largeimage: 'images/preview_l1.jpg'}"><img src="<?=Yii::$app->params['backend_domain'].$good->logo?>"></a>
+                                <a class="zoomThumbActive" href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: '<?=\Yii::$app->params['backend_domain'].$good->logo?>',largeimage: '<?=\Yii::$app->params['backend_domain'].$good->logo?>'}"><img src="<?=\Yii::$app->params['backend_domain'].$good->logo?>"></a>
                             </li>
-
-                            <?php foreach ($gallerys as $gallery):?>
-                            <li>
-                                <a href="javascript:void(0);" rel="{gallery: 'gal1', smallimage: 'images/preview_m2.jpg',largeimage: 'images/preview_l2.jpg'}"><img src="<?=Yii::$app->params['backend_domain'].$gallery->path?>"></a>
-                            </li>
-                            <?php endforeach;?>
+                            <?=\backend\models\GoodsGallery::getGoodsGallery($good->id)?>
                         </ul>
                     </div>
 
@@ -722,114 +717,8 @@
                     </div>
 
                     <div class="comment_items mt10">
-                        <div class="user_pic">
-                            <dl>
-                                <dt><a href=""><img src="/images/user1.gif" alt="" /></a></dt>
-                                <dd><a href="">乖乖</a></dd>
-                            </dl>
-                        </div>
-                        <div class="item">
-                            <div class="title">
-                                <span>2013-03-11 22:18</span>
-                                <strong class="star star5"></strong> <!-- star5表示5星级 start4表示4星级，以此类推 -->
-                            </div>
-                            <div class="comment_content">
-                                <dl>
-                                    <dt>心得：</dt>
-                                    <dd>东西挺好，挺满意的！</dd>
-                                </dl>
-                                <dl>
-                                    <dt>优点：</dt>
-                                    <dd>反应速度开，散热性能好</dd>
-                                </dl>
-                                <dl>
-                                    <dt>不足：</dt>
-                                    <dd>暂时还没发现缺点哦！</dd>
-                                </dl>
-                                <dl>
-                                    <dt>购买日期：</dt>
-                                    <dd>2013-11-24</dd>
-                                </dl>
-                            </div>
-                            <div class="btns">
-                                <a href="" class="reply">回复(0)</a>
-                                <a href="" class="useful">有用(0)</a>
-                            </div>
-                        </div>
-                        <div class="cornor"></div>
-                    </div>
+                        <?=$content->content?>
 
-                    <div class="comment_items mt10">
-                        <div class="user_pic">
-                            <dl>
-                                <dt><a href=""><img src="/images/user2.jpg" alt="" /></a></dt>
-                                <dd><a href="">小宝贝</a></dd>
-                            </dl>
-                        </div>
-                        <div class="item">
-                            <div class="title">
-                                <span>2013-10-01 14:10</span>
-                                <strong class="star star4"></strong> <!-- star5表示5星级 start4表示4星级，以此类推 -->
-                            </div>
-                            <div class="comment_content">
-                                <dl>
-                                    <dt>心得：</dt>
-                                    <dd>外观漂亮同，还在使用过程中。</dd>
-                                </dl>
-                                <dl>
-                                    <dt>型号：</dt>
-                                    <dd>i5 8G内存版</dd>
-                                </dl>
-                                <dl>
-                                    <dt>购买日期：</dt>
-                                    <dd>2013-11-20</dd>
-                                </dl>
-                            </div>
-                            <div class="btns">
-                                <a href="" class="reply">回复(0)</a>
-                                <a href="" class="useful">有用(0)</a>
-                            </div>
-                        </div>
-                        <div class="cornor"></div>
-                    </div>
-
-                    <div class="comment_items mt10">
-                        <div class="user_pic">
-                            <dl>
-                                <dt><a href=""><img src="/images/user3.jpg" alt="" /></a></dt>
-                                <dd><a href="">天使</a></dd>
-                            </dl>
-                        </div>
-                        <div class="item">
-                            <div class="title">
-                                <span>2013-03-11 22:18</span>
-                                <strong class="star star5"></strong> <!-- star5表示5星级 start4表示4星级，以此类推 -->
-                            </div>
-                            <div class="comment_content">
-                                <dl>
-                                    <dt>心得：</dt>
-                                    <dd>挺好的，物超所值，速度挺好，WIN8用起来也不错。</dd>
-                                </dl>
-                                <dl>
-                                    <dt>优点：</dt>
-                                    <dd>散热很好，配置不错</dd>
-                                </dl>
-                                <dl>
-                                    <dt>不足：</dt>
-                                    <dd>暂时还没发现缺点哦！</dd>
-                                </dl>
-                                <dl>
-                                    <dt>购买日期：</dt>
-                                    <dd>2013-11-24</dd>
-                                </dl>
-                            </div>
-                            <div class="btns">
-                                <a href="" class="reply">回复(0)</a>
-                                <a href="" class="useful">有用(0)</a>
-                            </div>
-                        </div>
-                        <div class="cornor"></div>
-                    </div>
 
                     <!-- 分页信息 start -->
                     <div class="page mt20">

@@ -800,7 +800,7 @@
                 <?php foreach ($goods as $good):?>
                 <li>
                     <dl>
-                        <dt><a href="<?=\yii\helpers\Url::to(['index/intro'])?>?goods_id=<?=$good->id?>"><img src="http://admin.yii2shop.com<?=$good->logo?>" alt="" style="height:100px;" /></a></dt>
+                        <dt><a href="<?=\yii\helpers\Url::to(['index/intro'])?>?goods_id=<?=$good->id?>"><img src="<?=Yii::$app->params['backend_domain'].$good->logo?>" alt="" style="height:100px;" /></a></dt>
                         <dd><a href="<?=\yii\helpers\Url::to(['index/intro'])?>?goods_id=<?=$good->id?>"><?=$good->name?></a></dt>
                         <dd><strong>￥<?=$good->shop_price?></strong></dt>
                         <dd><a href=""><em>已有10人评价</em></a></dt>

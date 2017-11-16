@@ -177,7 +177,6 @@ class GoodsController extends Controller
                 $model->save(0);
                 $model1->goods_id = $model->id;
                 $model1->save(0);
-
                     $model2->count += 1;
                     $model2->save(0);
 
@@ -310,7 +309,7 @@ class GoodsController extends Controller
             'upload' => [
                 'class' => 'kucha\ueditor\UEditorAction',
                 'config' => [
-                    "imageUrlPrefix"  => '/upload',//图片访问路径前缀
+                    "imageUrlPrefix"  => \Yii::$app->params['backend_domain'].'/upload',//图片访问路径前缀
                     "imagePathFormat" => "/image/{yyyy}{mm}{dd}/{time}{rand:6}",//上传保存路径
                     "imageRoot" => \Yii::getAlias("@webroot").'/upload'
                 ]
