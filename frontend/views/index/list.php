@@ -14,6 +14,104 @@
     <script type="text/javascript" src="/js/jquery-1.8.3.min.js"></script>
     <script type="text/javascript" src="/js/header.js"></script>
     <script type="text/javascript" src="/js/list.js"></script>
+    <style>
+        .pagination {
+            display: inline-block;
+            padding-left: 0;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .pagination > li {
+            display: inline;
+        }
+        .pagination > li > a,
+        .pagination > li > span {
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #337ab7;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+        .pagination > li:first-child > a,
+        .pagination > li:first-child > span {
+            margin-left: 0;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+        .pagination > li:last-child > a,
+        .pagination > li:last-child > span {
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+        .pagination > li > a:hover,
+        .pagination > li > span:hover,
+        .pagination > li > a:focus,
+        .pagination > li > span:focus {
+            z-index: 2;
+            color: #23527c;
+            background-color: #eee;
+            border-color: #ddd;
+        }
+        .pagination > .active > a,
+        .pagination > .active > span,
+        .pagination > .active > a:hover,
+        .pagination > .active > span:hover,
+        .pagination > .active > a:focus,
+        .pagination > .active > span:focus {
+            z-index: 3;
+            color: #fff;
+            cursor: default;
+            background-color: #337ab7;
+            border-color: #337ab7;
+        }
+        .pagination > .disabled > span,
+        .pagination > .disabled > span:hover,
+        .pagination > .disabled > span:focus,
+        .pagination > .disabled > a,
+        .pagination > .disabled > a:hover,
+        .pagination > .disabled > a:focus {
+            color: #777;
+            cursor: not-allowed;
+            background-color: #fff;
+            border-color: #ddd;
+        }
+        .pagination-lg > li > a,
+        .pagination-lg > li > span {
+            padding: 10px 16px;
+            font-size: 18px;
+            line-height: 1.3333333;
+        }
+        .pagination-lg > li:first-child > a,
+        .pagination-lg > li:first-child > span {
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
+        }
+        .pagination-lg > li:last-child > a,
+        .pagination-lg > li:last-child > span {
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+        }
+        .pagination-sm > li > a,
+        .pagination-sm > li > span {
+            padding: 5px 10px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        .pagination-sm > li:first-child > a,
+        .pagination-sm > li:first-child > span {
+            border-top-left-radius: 3px;
+            border-bottom-left-radius: 3px;
+        }
+        .pagination-sm > li:last-child > a,
+        .pagination-sm > li:last-child > span {
+            border-top-right-radius: 3px;
+            border-bottom-right-radius: 3px;
+        }
+    </style>
 </head>
 <body>
 <!-- 顶部导航 start -->
@@ -24,7 +122,9 @@
         </div>
         <div class="topnav_right fr">
             <ul>
-                <li>您好，欢迎来到京西！[<a href="login.html">登录</a>] [<a href="register.html">免费注册</a>] </li>
+                <li><?php if (empty(Yii::$app->user->identity)):?>[<a href="<?=\yii\helpers\Url::to(['member/login'])?>">登录</a>] [<a href="<?=\yii\helpers\Url::to(['member/regist'])?>">免费注册</a>] <?php endif;?>
+                    <?php if (!empty(Yii::$app->user->identity)):?>您好<?=Yii::$app->user->identity->username?>，欢迎来到京西！ [<a href="<?=\yii\helpers\Url::to(['member/logout'])?>">注销</a>][<a href="<?=\yii\helpers\Url::to(['address/index'])?>">我的收获地址</a>]<?php endif;?>
+                </li>
                 <li class="line">|</li>
                 <li>我的订单</li>
                 <li class="line">|</li>
@@ -74,8 +174,16 @@
                     <b></b>
                 </dt>
                 <dd>
-                    <div class="prompt">
-                        您好，请<a href="">登录</a>
+                    <?php if (empty(Yii::$app->user->identity)):?>
+                        <div class="prompt">
+                            您好，请<a href="<?=\yii\helpers\Url::to(['member/login'])?>">登录</a>
+                        </div>
+                    <?php endif;?>
+                    <?php if (!empty(Yii::$app->user->identity)):?>
+                        <div class="prompt">
+                            您好<?=Yii::$app->user->identity->username?>，欢迎来到京西 可以<a href="<?=\yii\helpers\Url::to(['member/logout'])?>">注销</a>
+                        </div>
+                    <?php endif;?>
                     </div>
                     <div class="uclist mt10">
                         <ul class="list1 fl">
@@ -692,32 +800,23 @@
                 <?php foreach ($goods as $good):?>
                 <li>
                     <dl>
-                        <dt><a href=""><img src="http://admin.yii2shop.com<?=$good->logo?>" alt="" style="height:100px;" /></a></dt>
-                        <dd><a href=""><?=$good->name?></a></dt>
+                        <dt><a href="<?=\yii\helpers\Url::to(['index/intro'])?>?goods_id=<?=$good->id?>"><img src="http://admin.yii2shop.com<?=$good->logo?>" alt="" style="height:100px;" /></a></dt>
+                        <dd><a href="<?=\yii\helpers\Url::to(['index/intro'])?>?goods_id=<?=$good->id?>"><?=$good->name?></a></dt>
                         <dd><strong>￥<?=$good->shop_price?></strong></dt>
                         <dd><a href=""><em>已有10人评价</em></a></dt>
                     </dl>
                 </li>
                 <?php endforeach;?>
+
             </ul>
         </div>
         <!-- 商品列表 end-->
 
         <!-- 分页信息 start -->
         <div class="page mt20">
-            <a href="">首页</a>
-            <a href="">上一页</a>
-            <a href="">1</a>
-            <a href="">2</a>
-            <a href="" class="cur">3</a>
-            <a href="">4</a>
-            <a href="">5</a>
-            <a href="">下一页</a>
-            <a href="">尾页</a>&nbsp;&nbsp;
-            <span>
-					<em>共8页&nbsp;&nbsp;到第 <input type="text" class="page_num" value="3"/> 页</em>
-					<a href="" class="skipsearch" href="javascript:;">确定</a>
-				</span>
+            <?php
+            echo \yii\widgets\LinkPager::widget(['pagination'=>$page])
+            ?>
         </div>
         <!-- 分页信息 end -->
 

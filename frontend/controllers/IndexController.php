@@ -5,6 +5,9 @@ use frontend\models\ArticleCategory;
 use frontend\models\ArticleDetail;
 use frontend\models\Goods;
 use frontend\models\GoodsCategory;
+use frontend\models\GoodsGallery;
+use frontend\models\GoodsIntro;
+use yii\data\Pagination;
 use yii\web\Controller;
 
 class IndexController extends Controller{
@@ -13,8 +16,8 @@ class IndexController extends Controller{
      */
     public function actionIndex(){
         $categorys = GoodsCategory::find()->where(['parent_id'=>0])->all();
-        $article_categorys = ArticleCategory::find()->all();
-        return $this->render('index',['categorys'=>$categorys,'acticle_categorys'=>$article_categorys]);
+        $acticle_categorys = $acticle_categorys = ArticleCategory::find()->all();
+        return $this->render('index',['categorys'=>$categorys,'acticle_categorys'=>$acticle_categorys]);
     }
 
     /**
@@ -64,4 +67,42 @@ class IndexController extends Controller{
         $article = Article::findOne(['id'=>$id]);
         return $this->render('view',['model'=>$model,'article'=>$article]);
     }
+    /**
+     * 优化商品查询
+     */
+    public function actionList($goods_category_id){
+        $goods_category = \backend\models\GoodsCategory::findOne(['id'=>$goods_category_id]);
+        if ($goods_category->depth == 2){
+            $query = Goods::find()->where(['goods_category_id'=>$goods_category_id]);
+
+        }else{
+            $ids = $goods_category->children()->andWhere(['depth'=>2])->column();
+//            $ids = [];
+//            foreach ($result as $category){
+//                $ids[] = $category->id;
+//            }
+            $query = Goods::find()->where(['in','goods_category_id',$ids]);
+        }
+        $page = new Pagination();
+        $page->totalCount = $query->count();
+        $page->pageSize = 2;
+        $models = $query->limit($page->pageSize)->offset($page->offset)->all();
+        return $this->render('list',['goods'=>$models,'page'=>$page]);
+    }
+    /**
+     * 展示商品详情
+     */
+    public function actionIntro($goods_id){
+        $intro = GoodsIntro::findOne(['goods_id'=>$goods_id]);
+        $gallerys = GoodsGallery::find()->where(['goods_id'=>$goods_id])->all();
+        $good = Goods::findOne(['id'=>$goods_id]);
+//        var_dump($good);die;
+//        var_dump($gallerys);die;
+        return $this->render('intro',['intro'=>$intro,'gallerys'=>$gallerys,'good'=>$good]);
+    }
+//    public function actionDe(){
+//        $redis = new \Redis();
+//        $redis->connect('127.0.0.1');
+//       $redis->delete('goods-category');
+//    }
 }

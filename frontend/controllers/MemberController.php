@@ -2,9 +2,11 @@
 namespace frontend\controllers;
 use common\models\LoginForm;
 use frontend\components\Sms;
+use frontend\models\Cart;
 use frontend\models\Member;
 use yii\filters\AccessControl;
 use yii\web\Controller;
+use yii\web\Cookie;
 
 class MemberController extends Controller{
     public $enableCsrfValidation = false;
@@ -52,7 +54,32 @@ class MemberController extends Controller{
 //            var_dump($model->rememberMe);die;
             if ($model->validate()){
             if ($model->login()){
-                \Yii::$app->session->setFlash('success','登录失败！用户名密码错误');
+                $cookies = \Yii::$app->request->cookies;
+                //查看cookie里面是否有
+                $carts = $cookies->getValue('carts');
+                if ($carts){
+                    $carts = unserialize($carts);
+//                    var_dump($carts);die;
+                    foreach ($carts as $key=>$cart){
+                        $goods = Cart::findOne(['goods_id'=>$key]);
+//                        var_dump($goods);die;
+                        if ($goods){
+                            $goods->amount += $cart;
+                            $goods->save();
+                        }else{
+                            $model = new Cart();
+                            $model->goods_id = $key;
+                            $model->amount = $cart;
+                            $model->member_id = \Yii::$app->user->identity->id;
+                            if ($model->validate()){
+                                $model->save();
+                            }
+                        }
+                    }
+//                    var_dump($carts);die;
+                }
+                $cookies = \Yii::$app->response->cookies;
+                $cookies->remove('carts');
                 return $this->redirect(['index/index']);
             }else{
                 \Yii::$app->session->setFlash('success','登录失败！用户名密码错误');

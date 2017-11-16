@@ -764,7 +764,22 @@
             }
         });
     });
+<?php if (!empty($models)):?>
+   $('#cmbProvince').bind('change',function () {
+        $(this).find('option[value=<?=$models->province?>]').prop('selected',true);
+    });
+    $('#cmbProvince').trigger('change');
 
+    $('#cmbCity').bind('change',function () {
+        $(this).find('option[value=<?=$models->city?>]').prop('selected',true);
+    });
+    $('#cmbCity').trigger('change');
+
+    $('#cmbArea').bind('change',function () {
+        $(this).find('option[value=<?=$models->county?>]').prop('selected',true);
+    });
+    $('#cmbArea').trigger('change');
+<?php endif;?>
 </script>
 </body>
 </html>

@@ -145,13 +145,7 @@
                             <dt><a href="">电子书</a></dt>
                             <?php foreach ($child->child as $a):?>
                             <dd>
-                                <a href=""><?=$a->name?></>
-<!--                                <a href="">小说</a>-->
-<!--                                <a href="">励志与成功</a>-->
-<!--                                <a href="">婚恋/两性</a>-->
-<!--                                <a href="">文学</a>-->
-<!--                                <a href="">经管</a>-->
-<!--                                <a href="">畅读VIP</a>-->
+                                <a href=""><?=$a->name?></a>
                             </dd>
                                 <?php endforeach;?>
                         </dl>

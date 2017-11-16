@@ -5,7 +5,7 @@
 */
 
 $(function(){
-	
+    totals();
 	//减少
 	$(".reduce_num").click(function(){
 		var amount = $(this).parent().find(".amount");
@@ -17,13 +17,11 @@ $(function(){
 		//小计
 		var subtotal = parseFloat($(this).parent().parent().find(".col3 span").text()) * parseInt($(amount).val());
 		$(this).parent().parent().find(".col5 span").text(subtotal.toFixed(2));
+        //使用ajax请求修改后台购物车数据
+        var goods_id = $(this).closest('tr').attr('data_id');
+        change(goods_id,$(amount).val());
 		//总计金额
-		var total = 0;
-		$(".col5 span").each(function(){
-			total += parseFloat($(this).text());
-		});
-
-		$("#total").text(total.toFixed(2));
+        totals();
 	});
 
 	//增加
@@ -33,13 +31,11 @@ $(function(){
 		//小计
 		var subtotal = parseFloat($(this).parent().parent().find(".col3 span").text()) * parseInt($(amount).val());
 		$(this).parent().parent().find(".col5 span").text(subtotal.toFixed(2));
+        //使用ajax请求修改后台购物车数据
+        var goods_id = $(this).closest('tr').attr('data_id');
+        change(goods_id,$(amount).val());
 		//总计金额
-		var total = 0;
-		$(".col5 span").each(function(){
-			total += parseFloat($(this).text());
-		});
-
-		$("#total").text(total.toFixed(2));
+        totals();
 	});
 
 	//直接输入
@@ -51,13 +47,27 @@ $(function(){
 		//小计
 		var subtotal = parseFloat($(this).parent().parent().find(".col3 span").text()) * parseInt($(this).val());
 		$(this).parent().parent().find(".col5 span").text(subtotal.toFixed(2));
+        //使用ajax请求修改后台购物车数据
+        var goods_id = $(this).closest('tr').attr('data_id');
+        change(goods_id,$(this).val());
 		//总计金额
-		var total = 0;
-		$(".col5 span").each(function(){
-			total += parseFloat($(this).text());
-		});
-
-		$("#total").text(total.toFixed(2));
+        totals();
 
 	});
+    totals();
+
 });
+var totals = function () {
+    var total = 0;
+    $(".col5 span").each(function(){
+        total += parseFloat($(this).text());
+    });
+
+    $("#total").text(total.toFixed(2));
+};
+//修改
+var change = function (goods_id,amount) {
+    $.post("/cart/ajax-cart?type=change",{goods_id:goods_id,amount:amount},function (data) {
+
+    })
+};

@@ -144,25 +144,7 @@
                 <em></em>
             </div>
 
-            <div class="cat_bd">
-                <?php foreach ($categorys as $category):?>
-                    <div class="cat item1">
-                        <h3><a href="<?=\yii\helpers\Url::to(['index/one'])?>?id=<?=$category->id?>"><?=$category->name?></a> <b></b></h3>
-                        <div class="cat_detail">
-                            <?php foreach ($category->children as $child):?>
-                                <dl class="dl_1st">
-                                    <dt><a href="<?=\yii\helpers\Url::to(['index/two'])?>?id=<?=$child->id?>"><?=$child->name?></a></dt>
-                                    <?php foreach ($child->children as $a):?>
-                                        <dd>
-                                            <a href="<?=\yii\helpers\Url::to(['index/view'])?>?id=<?=$a->id?>"><?=$a->name?></a>
-                                        </dd>
-                                    <?php endforeach;?>
-                                </dl>
-                            <?php endforeach;?>
-                        </div>
-
-                    </div>
-                <?php endforeach;?>
+            <?=\frontend\models\GoodsCategory::getIndexGoodsCategory()?>
 
             </div>
 
@@ -649,7 +631,6 @@
     <?php foreach ($acticle_categorys as $article):?>
     <div class="bnav1">
         <h3><b></b> <em><?=$article->name?></em></h3>
-
         <ul>
             <?php foreach ($article->article as $a):?>
             <li><a href="<?= \yii\helpers\Url::to(['index/content','id'=>$a->id])?>"><?=$a->name?></a></li>
@@ -657,52 +638,6 @@
         </ul>
     </div>
 <?php endforeach;?>
-<!--    <div class="bnav2">-->
-<!--        <h3><b></b> <em>配送方式</em></h3>-->
-<!--        <ul>-->
-<!--            <li><a href="">上门自提</a></li>-->
-<!--            <li><a href="">快速运输</a></li>-->
-<!--            <li><a href="">特快专递（EMS）</a></li>-->
-<!--            <li><a href="">如何送礼</a></li>-->
-<!--            <li><a href="">海外购物</a></li>-->
-<!--        </ul>-->
-<!--    </div>-->
-<!---->
-<!---->
-<!--    <div class="bnav3">-->
-<!--        <h3><b></b> <em>支付方式</em></h3>-->
-<!--        <ul>-->
-<!--            <li><a href="">货到付款</a></li>-->
-<!--            <li><a href="">在线支付</a></li>-->
-<!--            <li><a href="">分期付款</a></li>-->
-<!--            <li><a href="">邮局汇款</a></li>-->
-<!--            <li><a href="">公司转账</a></li>-->
-<!--        </ul>-->
-<!--    </div>-->
-<!---->
-<!--    <div class="bnav4">-->
-<!--        <h3><b></b> <em>售后服务</em></h3>-->
-<!--        <ul>-->
-<!--            <li><a href="">退换货政策</a></li>-->
-<!--            <li><a href="">退换货流程</a></li>-->
-<!--            <li><a href="">价格保护</a></li>-->
-<!--            <li><a href="">退款说明</a></li>-->
-<!--            <li><a href="">返修/退换货</a></li>-->
-<!--            <li><a href="">退款申请</a></li>-->
-<!--        </ul>-->
-<!--    </div>-->
-<!---->
-<!--    <div class="bnav5">-->
-<!--        <h3><b></b> <em>特色服务</em></h3>-->
-<!--        <ul>-->
-<!--            <li><a href="">夺宝岛</a></li>-->
-<!--            <li><a href="">DIY装机</a></li>-->
-<!--            <li><a href="">延保服务</a></li>-->
-<!--            <li><a href="">家电下乡</a></li>-->
-<!--            <li><a href="">京东礼品卡</a></li>-->
-<!--            <li><a href="">能效补贴</a></li>-->
-<!--        </ul>-->
-<!--    </div>-->
 </div>
 <!-- 底部导航 end -->
 

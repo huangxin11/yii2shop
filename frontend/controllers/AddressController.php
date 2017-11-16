@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 use frontend\models\Address;
+use frontend\models\ArticleCategory;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 
@@ -10,9 +11,10 @@ class AddressController extends Controller{
      * 展示列表
      */
     public function actionIndex(){
+//        $article_categorys = ArticleCategory::find()->all();
         $members = Address::find()->where(['member_id'=>\Yii::$app->user->identity->id])/*->orderBy(['status'=>'ASC'])*/->all();
 //        var_dump($members);die;
-        return $this->render('address',['members'=>$members]);
+        return $this->render('address',['members'=>$members/*,'article_categorys'=>$article_categorys*/]);
     }
     /**
      * 添加地址
