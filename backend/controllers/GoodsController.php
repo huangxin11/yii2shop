@@ -44,6 +44,9 @@ class GoodsController extends Controller
                     $model->makeRoot();
                     //$model->save(); //不能使用save创建节点
                     \Yii::$app->session->setFlash('success', '添加成功');
+                    $redis = new \Redis();
+                    $redis->connect('127.0.0.1',6379);
+                    $redis->del('goods-category');
                     return $this->redirect(['index-category']);
                 } else {
                     $parent = GoodsCategory::findOne(['id' => $model->parent_id]);
@@ -51,6 +54,9 @@ class GoodsController extends Controller
                     /*      $russia = new Menu(['name' => 'Russia']);
                           $russia->prependTo($countries);*/
                     $model->prependTo($parent);
+                    $redis = new \Redis();
+                    $redis->connect('127.0.0.1',6379);
+                    $redis->del('goods-category');
                     \Yii::$app->session->setFlash('success', '添加成功');
                     return $this->redirect(['index-category']);
                 }
@@ -179,7 +185,6 @@ class GoodsController extends Controller
                 $model1->save(0);
                     $model2->count += 1;
                     $model2->save(0);
-
                 \Yii::$app->session->setFlash('success', '添加成功');
                 return $this->redirect(['index-goods']);
             }else{

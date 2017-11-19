@@ -21,7 +21,6 @@ class CartController extends Controller{
                 $carts = [];
             }
             $models = Goods::find()->where(['in','id',array_keys($carts)])->all();
-//            var_dump($carts);die;
         }else{
             $carts = Cart::find()->where(['member_id'=>\Yii::$app->user->identity->id])->all();
             $carts = ArrayHelper::map($carts,'goods_id','amount');
@@ -58,6 +57,7 @@ class CartController extends Controller{
          $cookie = new Cookie();
         $cookie->name = 'carts';
         $cookie->value = serialize($carts);
+        $cookie->expire = time()+30*24*3600;
         $cookies->add($cookie);
         }else{
             $request = \Yii::$app->request;

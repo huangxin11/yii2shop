@@ -95,16 +95,12 @@
                     <b></b>
                 </dt>
                 <dd>
-                    <?php if (empty(Yii::$app->user->identity)):?>
-                        <div class="prompt">
-                            您好，请<a href="<?=\yii\helpers\Url::to(['member/login'])?>">登录</a>
-                        </div>
-                    <?php endif;?>
-                    <?php if (!empty(Yii::$app->user->identity)):?>
-                        <div class="prompt">
-                            您好<?=Yii::$app->user->identity->username?>，欢迎来到京西 可以<a href="<?=\yii\helpers\Url::to(['member/logout'])?>">注销</a>
-                        </div>
-                    <?php endif;?>
+                    <div class="prompt">
+                        <?php if(\Yii::$app->user->isGuest){?>
+                            您好 ，请<a href="<?=\yii\helpers\Url::to(['member/login'])?>">登录</a>
+                        <?php }else{?>
+                            您好 <?=Yii::$app->user->identity->username?>  　<a href="<?=\yii\helpers\Url::to(['member/logout'])?>">退出</a>
+                        <?php }?>
                     </div>
                     <div class="uclist mt10">
                         <ul class="list1 fl">
