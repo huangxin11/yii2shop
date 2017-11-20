@@ -40,14 +40,18 @@ class PermissionForm extends Model{
     }
     public function add(){
         $auth = \Yii::$app->authManager;
+        //创建一个权限
         $permission = $auth->createPermission($this->name);
+        //给权限赋值描述
         $permission->description = $this->description;
+        //保存到数据库
         return $auth->add($permission);
     }
     public function update($name){
         $auth = \Yii::$app->authManager;
         $newpermission = $auth->createPermission($this->name);
         $newpermission->description = $this->description;
+        //修改权限，第一个参数就旧权限名，第二个参数是新权限
         return $auth->update($name,$newpermission);
     }
 }

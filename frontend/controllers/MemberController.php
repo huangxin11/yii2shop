@@ -78,15 +78,21 @@ class MemberController extends Controller{
                     }
 //                    var_dump($carts);die;
                 }
+                //登录成功，将cookie中保存的数据同步到数据库后删除cookie
                 $cookies = \Yii::$app->response->cookies;
                 $cookies->remove('carts');
-                return $this->redirect(['index/index']);
+                //返回登录之前的页面
+                return $this->goBack();
             }else{
                 \Yii::$app->session->setFlash('success','登录失败！用户名密码错误');
+                //post方式就跳转到登录界面
                 return $this->redirect(['member/login']);
             }
-            }var_dump($model->getErrors());die;
+            }
         }
+        //将上次页面地址保存到session中，
+        \Yii::$app->user->setReturnUrl(\Yii::$app->request->referrer);
+        //显示登录界面
         return $this->render('login');
     }
     public function actionRegist(){

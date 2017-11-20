@@ -13,24 +13,36 @@ class AuthController extends Controller{
      * 展示权限
      */
     public function actionIndexPermission(){
+        //实例化组件
         $auth = \Yii::$app->authManager;
+        //获取所有的权限
         $permissions = $auth->getPermissions();
+        //显示权限列表
             return $this->render('indexpermission',['permissions'=>$permissions]);
     }
     /**
      * 添加权限
      */
     public function actionAddPermission(){
+        //实例化权限的表单模型
             $model = new PermissionForm();
+            //自定义规则给该方法添加名字
             $model->scenario = PermissionForm::SCENARIO_Add;
+            //实例化组件
         $request = \Yii::$app->request;
+        //判断是否是post方式提交的数据
         if ($request->isPost){
+            //接收数据
             $model->load($request->post());
+            //验证并且判断添加方法是否成功
                 if ($model->validate() && $model->add()){
+                    //提示
                     \Yii::$app->session->setFlash('success','添加成功');
+                    //跳转
                     return $this->redirect(['index-permission']);
                 }
         }
+        //展示添加权限页面
             return $this->render('addpermission',['model'=>$model]);
 
     }
@@ -38,21 +50,35 @@ class AuthController extends Controller{
      * 修改权限
      */
     public function actionUpdatePermission(){
+        //接收权限名
             $name = $_GET['name'];
+            //实例化组件
             $auth = \Yii::$app->authManager;
+            //实例化权限表单模型
             $form = new PermissionForm();
+        //自定义规则给该方法添加名字
         $form->scenario = PermissionForm::SCENARIO_EDIT;
+        //通过权限名获取权限
         $permission = $auth->getPermission($name);
+        //将权限名复制给$name
         $name = $permission->name;
+        //赋值给oldName属性
         $form->oldName = $name;
+        //判断是否有这个权限
         if ($permission == null){
+            //展示错误，权限不存在
             throw new NotFoundHttpException('权限不存在');
         }
             $request = \Yii::$app->request;
+        //判断是否post方式提交
             if ($request->isPost){
+                //接收数据
                 $form->load($request->post());
+                //验证并且判断修改方法是否成功
                 if ($form->validate() && $form->update($name)){
+                    //提示
                     \Yii::$app->session->setFlash('success','修改成功！');
+                    //跳转
                     return $this->redirect(['index-permission']);
                 }
 
@@ -60,6 +86,7 @@ class AuthController extends Controller{
 
             $form->name = $permission->name;
             $form->description = $permission->description;
+            //展示修改表单
             return $this->render('addpermission',['model'=>$form]);
     }
     /**
@@ -69,8 +96,11 @@ class AuthController extends Controller{
         $auth = \Yii::$app->authManager;
         $name = $_POST['name'];
 //        var_dump($name);die;
+        //获取权限
         $permission = $auth->getPermission($name);
+        //删除权限
         if ($auth->remove($permission)){
+            //返回值
             echo 'success';
             exit;
         };
