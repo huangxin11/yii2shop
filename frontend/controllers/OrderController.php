@@ -126,10 +126,5 @@ class OrderController extends Controller{
         return $this->render('order',['orders'=>$orders]);
     }
 
-    /**
-     * 删除订单
-     */
-    public function actionDelete(){
-        $id = $_POST['id'];
-    }
+
 }

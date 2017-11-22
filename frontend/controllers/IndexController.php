@@ -7,7 +7,9 @@ use frontend\models\Goods;
 use frontend\models\GoodsCategory;
 use frontend\models\GoodsGallery;
 use frontend\models\GoodsIntro;
+use frontend\models\SphinxClient;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 
 class IndexController extends Controller{
@@ -17,7 +19,49 @@ class IndexController extends Controller{
     public function actionIndex(){
         $categorys = GoodsCategory::find()->where(['parent_id'=>0])->all();
         $acticle_categorys = $acticle_categorys = ArticleCategory::find()->all();
-        return $this->render('index',['categorys'=>$categorys,'acticle_categorys'=>$acticle_categorys]);
+        $content = $this->render('index',['categorys'=>$categorys,'acticle_categorys'=>$acticle_categorys]);
+        file_put_contents('index.html',$content);
+        return $content;
+    }
+    //中文分词搜索测试
+    public function actionSearch(){
+//        var_dump($_GET);die;
+        $serarch = $_GET['serarch'];
+        if ($serarch == '请输入商品关键字'){
+            return $this->redirect(['index/index']);
+        }
+        $cl = new SphinxClient();
+        $cl->SetServer ( '127.0.0.1', 9312);//设置sphinx的searchd服务信息
+        $cl->SetConnectTimeout ( 10 );//超时
+        $cl->SetArrayResult ( true );//结果以数组形式返回
+// $cl->SetMatchMode ( SPH_MATCH_ANY);
+        $cl->SetMatchMode ( SPH_MATCH_EXTENDED2);//设置匹配模式
+        $cl->SetLimits(0, 1000);//设置分页
+        $info = $serarch;//查询关键字
+        //进行查询   Query(查询关键字,使用的索引)
+        $res = $cl->Query($info, 'goods');//shopstore_search
+//print_r($cl);
+        //print_r($res);
+        if(isset($res['matches'])){
+            //查询到结果
+            $ids = ArrayHelper::map($res['matches'],'id','id');
+
+            //var_dump($ids);
+            $query = Goods::find();
+            $page = new Pagination();
+            $page->totalCount = $query->count();
+            $page->pageSize = 2;
+            $models = $query->where(['in','id',$ids])->limit($page->pageSize)->offset($page->offset)->all();
+
+//            $models = $query->limit($page->pageSize)->offset($page->offset)->all();
+            return $this->render('list',['goods'=>$models,'page'=>$page]);
+        }else{
+        }
+    }
+    public function actionUserStatus(){
+        $isLogin = !\Yii::$app->user->isGuest;
+        $username = $isLogin?\Yii::$app->user->identity->username:'';
+        return json_encode(['isLogin'=>$isLogin,'username'=>$username]);
     }
 
     /**

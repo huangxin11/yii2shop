@@ -250,7 +250,7 @@
                     if (data == 'success'){
                         alert('短信发送成功!');
                     }else {
-                        alert('短信发送失败!');
+                        alert('短信发送失败!'+data);
                     }
         });
 

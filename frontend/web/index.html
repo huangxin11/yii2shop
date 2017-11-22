@@ -23,9 +23,7 @@
         </div>
         <div class="topnav_right fr">
             <ul>
-                <li id="userinfo"><?php if (empty(Yii::$app->user->identity)):?>[<a href="<?=\yii\helpers\Url::to(['member/login'])?>">登录</a>] [<a href="<?=\yii\helpers\Url::to(['member/regist'])?>">免费注册</a>] <?php endif;?>
-                    <?php if (!empty(Yii::$app->user->identity)):?>您好<?=Yii::$app->user->identity->username?>，欢迎来到京西！ [<a href="<?=\yii\helpers\Url::to(['member/logout'])?>">注销</a>][<a href="<?=\yii\helpers\Url::to(['address/index'])?>">我的收获地址</a>]<?php endif;?>
-                </li>
+                <li id="userinfo">[<a href="/member/login">登录</a>] [<a href="/member/regist">免费注册</a>]                                     </li>
                 <li class="line">|</li>
                 <li>我的订单</li>
                 <li class="line">|</li>
@@ -48,7 +46,7 @@
         <div class="search fl">
             <div class="search_form">
                 <div class="form_left fl"></div>
-                <form action="<?=\yii\helpers\Url::to(['index/search'])?>" method="get" class="fl">
+                <form action="/index/search" method="get" class="fl">
                     <input type="text" class="txt" name="serarch" value="请输入商品关键字" /><input type="submit" class="btn" value="搜索" />
                 </form>
                 <div class="form_right fl"></div>
@@ -135,8 +133,52 @@
                 <em></em>
             </div>
 
-            <?=\frontend\models\GoodsCategory::getIndexGoodsCategory()?>
-
+            <div class="cat_bd"><div class="cat item1">
+                <h3><a href="/index/list?goods_category_id=4">家电</a><b></b></h3>
+                <div class="cat_detail"><dl class="dl_1st">
+                        <dt><a href="/index/list?goods_category_id=15">电视机</a></dt>
+                        <dd><a href="/index/list?goods_category_id=20">超薄电视</a><a href="/index/list?goods_category_id=19">曲面电视</a><a href="/index/list?goods_category_id=16">液晶电视机</a></dd>
+                    </dl><dl >
+                        <dt><a href="/index/list?goods_category_id=11">冰箱</a></dt>
+                        <dd><a href="/index/list?goods_category_id=23">三门</a><a href="/index/list?goods_category_id=22">对开门</a><a href="/index/list?goods_category_id=21">多门冰箱</a></dd>
+                    </dl><dl >
+                        <dt><a href="/index/list?goods_category_id=6">洗衣机</a></dt>
+                        <dd><a href="/index/list?goods_category_id=44">111</a><a href="/index/list?goods_category_id=43">hha</a><a href="/index/list?goods_category_id=26">烘干机</a><a href="/index/list?goods_category_id=25">迷你洗衣机</a><a href="/index/list?goods_category_id=24">滚筒洗衣机</a></dd>
+                    </dl></div>
+            </div><div class="cat ">
+                <h3><a href="/index/list?goods_category_id=5">手机</a><b></b></h3>
+                <div class="cat_detail"><dl class="dl_1st">
+                        <dt><a href="/index/list?goods_category_id=36">小米手机</a></dt>
+                        <dd></dd>
+                    </dl><dl >
+                        <dt><a href="/index/list?goods_category_id=14">华为手机</a></dt>
+                        <dd><a href="/index/list?goods_category_id=37">华为荣耀</a></dd>
+                    </dl></div>
+            </div><div class="cat ">
+                <h3><a href="/index/list?goods_category_id=7">服装</a><b></b></h3>
+                <div class="cat_detail"><dl class="dl_1st">
+                        <dt><a href="/index/list?goods_category_id=29">童装</a></dt>
+                        <dd></dd>
+                    </dl><dl >
+                        <dt><a href="/index/list?goods_category_id=28">女装</a></dt>
+                        <dd><a href="/index/list?goods_category_id=35">打底衫</a><a href="/index/list?goods_category_id=34">打底裤</a><a href="/index/list?goods_category_id=33">连衣裙</a></dd>
+                    </dl><dl >
+                        <dt><a href="/index/list?goods_category_id=27">男装</a></dt>
+                        <dd><a href="/index/list?goods_category_id=32">牛仔裤</a><a href="/index/list?goods_category_id=31">当季热卖</a><a href="/index/list?goods_category_id=30">潮搭男装</a></dd>
+                    </dl></div>
+            </div><div class="cat ">
+                <h3><a href="/index/list?goods_category_id=38">小吃</a><b></b></h3>
+                <div class="cat_detail"><dl class="dl_1st">
+                        <dt><a href="/index/list?goods_category_id=40">南充小吃</a></dt>
+                        <dd></dd>
+                    </dl><dl >
+                        <dt><a href="/index/list?goods_category_id=41">宜宾小吃</a></dt>
+                        <dd></dd>
+                    </dl><dl >
+                        <dt><a href="/index/list?goods_category_id=39">成都小吃</a></dt>
+                        <dd><a href="/index/list?goods_category_id=42">成都不知道小吃</a></dd>
+                    </dl></div>
+            </div></div>
             </div>
 
         </div>
@@ -619,16 +661,47 @@
 
 <!-- 底部导航 start -->
 <div class="bottomnav w1210 bc mt10">
-    <?php foreach ($acticle_categorys as $article):?>
-    <div class="bnav1">
-        <h3><b></b> <em><?=$article->name?></em></h3>
+        <div class="bnav1">
+        <h3><b></b> <em>购物指南</em></h3>
         <ul>
-            <?php foreach ($article->article as $a):?>
-            <li><a href="<?= \yii\helpers\Url::to(['index/content','id'=>$a->id])?>"><?=$a->name?></a></li>
-            <?php endforeach;?>
-        </ul>
+                        <li><a href="/index/content?id=3">会员介绍</a></li>
+                        <li><a href="/index/content?id=4">团购/机票/充值/点卡</a></li>
+                        <li><a href="/index/content?id=5">购物流程</a></li>
+                        <li><a href="/index/content?id=6">常见问题</a></li>
+                        <li><a href="/index/content?id=7">在线支付</a></li>
+                        <li><a href="/index/content?id=8">分期付款</a></li>
+                    </ul>
     </div>
-<?php endforeach;?>
+    <div class="bnav1">
+        <h3><b></b> <em>派送方式</em></h3>
+        <ul>
+                        <li><a href="/index/content?id=9">上门自提</a></li>
+                        <li><a href="/index/content?id=10">快速运输</a></li>
+                        <li><a href="/index/content?id=11">如何送礼</a></li>
+                    </ul>
+    </div>
+    <div class="bnav1">
+        <h3><b></b> <em>支付方式</em></h3>
+        <ul>
+                        <li><a href="/index/content?id=1">货到付款</a></li>
+                    </ul>
+    </div>
+    <div class="bnav1">
+        <h3><b></b> <em>售后服务</em></h3>
+        <ul>
+                        <li><a href="/index/content?id=12">退换货政策</a></li>
+                        <li><a href="/index/content?id=13">退款说明</a></li>
+                        <li><a href="/index/content?id=14">价格保护</a></li>
+                    </ul>
+    </div>
+    <div class="bnav1">
+        <h3><b></b> <em>特色服务</em></h3>
+        <ul>
+                        <li><a href="/index/content?id=2">生活在梦中</a></li>
+                        <li><a href="/index/content?id=15">家电下乡</a></li>
+                        <li><a href="/index/content?id=16">夺宝岛</a></li>
+                    </ul>
+    </div>
 </div>
 <!-- 底部导航 end -->
 

@@ -12,7 +12,17 @@ class MemberController extends Controller{
     public $enableCsrfValidation = false;
 
     public function actionIndex(){
-        return $this->redirect(['index/index']);
+        //首页静态化 ob缓存
+        //开启ob缓存
+//        ob_start();
+//        //获取缓存内容
+//        ob_get_contents();
+//        //将内容保存到静态文件
+//        file_put_contents();
+        $content = $this->redirect(['index/index']);
+        //保存到静态文件
+        file_put_contents('index.html',$content);
+        return $content;
     }
 
     /**
@@ -119,6 +129,15 @@ class MemberController extends Controller{
 
     //ajax发送短信
     public function actionAjaxSms($phone){
+        $redis = new \Redis();
+        $redis->connect('127.0.0.1');
+        $code = $redis->get('captcha_'.$phone);
+        if ($code){
+            $result = 5*60 - $redis->ttl('captcha_'.$phone);
+            if ($result <= 60){
+                echo '不能在一分钟内发送两次';exit;
+            }
+        }
         $code = rand(1000,9999);
         $response = Sms::sendSms(
             "Model鑫", // 短信签名
