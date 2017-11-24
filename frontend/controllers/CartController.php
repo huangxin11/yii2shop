@@ -22,6 +22,7 @@ class CartController extends Controller{
             }
             $models = Goods::find()->where(['in','id',array_keys($carts)])->all();
         }else{
+//            echo 1;die;
             $carts = Cart::find()->where(['member_id'=>\Yii::$app->user->identity->id])->all();
             $carts = ArrayHelper::map($carts,'goods_id','amount');
             $models = Goods::find()->where(['in','id',array_keys($carts)])->all();
@@ -64,13 +65,13 @@ class CartController extends Controller{
             if ($request->isGet){
                 $goods_id = $_GET['goods_id'];
                 $amount = $_GET['amount'];
-
+//            var_dump($goods_id);die;
                 $goods = Cart::findOne(['goods_id'=>$goods_id]);
-                if ($goods){
+//                var_dump($goods);die;
+                if ($goods && $goods->member_id == \Yii::$app->user->identity->id){
                     $goods->amount += $amount;
                     $goods->save();
                 }else{
-
                     $model = new Cart();
                     $model->goods_id = $goods_id;
                     $model->amount = $amount;

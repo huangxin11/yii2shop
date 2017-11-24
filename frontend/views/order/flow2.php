@@ -274,41 +274,6 @@
                 }
         });
     });
-    //总价
-    var total_price = function (money) {
-        var total = 0;
-        $(".col5 span").each(function(){
-            total += $(this).text();
-            $(".total").text(total)
-
-        });
-        $("#total").text(total.toFixed(2));
-        money = parseInt(money);
-        $('.total_price').text((total+money).toFixed(2));
-    };
-    //邮寄金额
-    $(".delivery_select input").click(function () {
-        if ($(this).attr("checked")) {
-            var price = $(this).closest('tr').find('span').text();
-            $('#ems').text(price);
-            total_price($('#ems').text());
-        }
-    });
-    var price = $(".delivery_select input:checked").closest('tr').find('span').text();
-    $('#ems').text(price);
-    total_price($('#ems').text());
-
-    //总数量
-    var total_num =function () {
-        var num =0;
-        $("tbody .col4").each(function(){
-            num += parseInt($(this).text());
-        });
-        $('#total_num').text(num);
-    };
-    total_num();  //开始就执行一次
-    total_price();//开始就执行一次
-
 </script>
 </body>
 </html>
